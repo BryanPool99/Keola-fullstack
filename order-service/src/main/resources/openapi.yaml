@@ -1,0 +1,475 @@
+openapi: 3.0.1
+info:
+  title: Keola Order API
+  description: 'Esta API permite gestionar los pedidos'
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:8012/serviceorder/v1'
+x-devops-properties:
+  apiType: ne
+  apiDomain: custom
+  apiName: serviceorder
+  apiPlatform: oc
+tags:
+  - name: serviceorder-controller
+    description: Service Order Management Controller
+paths:
+  /order:
+    get:
+      tags:
+        - serviceorder-controller
+      summary: Consult the list of orders(retrieveOrder)
+      description: Lista de pedidos
+      operationId: retrieveOrder
+      parameters:
+        - $ref: "#/components/parameters/unicaUser"
+        - $ref: "#/components/parameters/filter"
+        - $ref: "#/components/parameters/sort"
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/offset"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveOrderResponse'
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+    post:
+      tags:
+        - serviceorder-controller
+      summary: Create a new order in the serviceorder management system(createOrder)
+      description: Enviar informacion para creacion de una nueva orden
+      operationId:  createOrder
+      parameters:
+        - $ref: "#/components/parameters/unicaUser"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrderRequest'
+      responses:
+        '201':
+          description: Created
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+    patch:
+      tags:
+        - serviceorder-controller
+      summary: Update an existing client in the service client management system(updateOrder)
+      description: Enviar informacion para actualizacion de un pedido
+      operationId:  updateOrder
+      parameters:
+        - $ref: "#/components/parameters/unicaUser"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateOrderRequest'
+      responses:
+        '204':
+          description: No Content
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+  /order/{orderId}:
+    get:
+      tags:
+        - serviceorder-controller
+      summary: Consult the order detail(retrieveOrderDetail)
+      description: Lista de detalle de pedido
+      operationId: retrieveOrderDetail
+      parameters:
+        - $ref: "#/components/parameters/unicaUser"
+        - $ref: "#/components/parameters/filter"
+        - $ref: "#/components/parameters/sort"
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/offset"
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            type: integer
+            description: orderId
+            example: 1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveOrderDetailResponse'
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+    delete:
+      tags:
+        - serviceorder-controller
+      summary: Delete an order(deleteOrder)
+      description: Eliminar una orden existente
+      operationId: deleteOrder
+      parameters:
+        - $ref: "#/components/parameters/unicaUser"
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            type: integer
+            description: orderId
+            example: 1
+      responses:
+        '204':
+          description: No Content
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+components:
+  schemas:
+    RetrieveOrderResponse:
+      type: object
+      description: Client Response
+      properties:
+        orderId:
+          type: integer
+          description: "Id of order."
+          example: 1
+        creationDate:
+          type: string
+          description: "Creation date"
+          example: "15/05/25"
+        client:
+          type: string
+          description: "Username of client."
+          example: "admin"
+        status:
+          type: integer
+          description: "status of order."
+          example: 1
+        totalPrice:
+          type: number
+          description: "totalPrice of products."
+          example: 199.99
+        additionalData:
+          type: array
+          items:
+            $ref: '#/components/schemas/AditionalData'
+        metadata:
+          $ref: '#/components/schemas/MetadataResponse'
+    CreateOrderRequest:
+      type: object
+      properties:
+        clientId:
+          type: integer
+          description: "Id of the client."
+          example: 1
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductRequest'
+        aditionalData:
+          type: array
+          items:
+            $ref: '#/components/schemas/AditionalData'
+    ProductRequest:
+      type: object
+      properties:
+        id:
+          description: id
+          type : integer
+          example: 1
+        amount:
+          description: id
+          type : integer
+          example: 5
+        aditionalData:
+          type: array
+          items:
+            $ref: '#/components/schemas/AditionalData'
+    UpdateOrderRequest:
+      type: object
+      properties:
+        orderId:
+          description: order id
+          type : integer
+          example: 1
+        clientId:
+          description: client id
+          type : integer
+          example: 1
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductRequest'
+        status:
+          type: integer
+          description: "status of order."
+          example: 1
+        totalPrice:
+          type: number
+          description: "totalPrice of products."
+          example: 199.99
+        aditionalData:
+          type: array
+          items:
+            $ref: '#/components/schemas/AditionalData'
+    RetrieveOrderDetailResponse:
+      type: object
+      description: Client Response
+      properties:
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductDetailResponse'
+        client:
+          $ref: '#/components/schemas/ClientDetailResponse'
+        totalPrice:
+          type: number
+          description: "totalPrice of products."
+          example: 199.99
+    ProductDetailResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: "The unique code for the Product."
+          example: 1
+        description:
+          type: string
+          description: "Description of the product."
+          example: "Memoria USB"
+        status:
+          type: integer
+          description: "Status of product."
+          example: 0
+        stock:
+          type: integer
+          description: "Stock of product."
+          example: 100
+        amount:
+          type: integer
+          description: "Amount of product."
+          example: 2
+        price:
+          type: number
+          description: "Price of product."
+          example: 19.99
+        subTotal:
+          type: number
+          description: "SubTotal of sale."
+          example: 19.99
+        additionalData:
+          type: array
+          items:
+            $ref: '#/components/schemas/AditionalData'
+    ClientDetailResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: "The unique code for the Product."
+          example: 1
+        firstName:
+          type: string
+          description: "FirstName of the client."
+          example: "Memoria USB"
+        lastName:
+          type: string
+          description: client last name
+          example: 'JORDAN BLANCAS'
+        username:
+          type: string
+          description: client alias
+          example: 'EVIALA'
+        email:
+          type: string
+          description: Email address
+          example: 'email@example.com'
+        phone:
+          type: string
+          description: Phone number
+          example: '123456789'
+        mobile:
+          type: string
+          description: Cell phone number
+          example: '987654321'
+        dni:
+          type: string
+          description: Identity card
+          example: '76804414'
+        status:
+          type: integer
+          description: Status 1(activo) 0(inactivo)
+          example: 1
+        additionalData:
+          type: array
+          items:
+            $ref: '#/components/schemas/AditionalData'
+    MetadataResponse:
+      type: object
+      properties:
+        limit:
+          description: Limit
+          type : integer
+          format: int64
+          example: 25
+        offset:
+          description: Offset
+          type : integer
+          format: int64
+          example: 0
+        totalElements:
+          description: Total elements
+          type : integer
+          format: int64
+          example: 10
+    AditionalData:
+      type: object
+      description: Adittional data
+      properties:
+        key:
+          type: string
+          example: "aditional Key"
+          description: "Clave de datos adicionales. Referencia (Key)"
+        value:
+          type: string
+          example: "aditioanal value"
+          description: "Valor de datos adicionales. Referencia (Value)"
+    ErrorType:
+      type: object
+      properties:
+        exceptionId:
+          type: string
+        exceptionText:
+          type: string
+        moreInfo:
+          type: string
+        userMessage:
+          type: string
+        httpStatus:
+          type: integer
+        exceptionDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorTypeDetail'
+      required:
+        - exceptionId
+        - exceptionText
+        - moreInfo
+        - userMessage
+    ErrorTypeDetail:
+      type: object
+      properties:
+        code:
+          type: string
+        component:
+          type: string
+        description:
+          type: string
+  parameters:
+    unicaUser:
+      name: UNICA-User
+      in: header
+      description: "Identificador del usuario del sistema y/o subsistema que inicia la petición. "
+      required: true
+      schema:
+        type: string
+      example: admin
+    filter:
+      name: filter
+      in: query
+      description: Filtros para la consulta
+      required: false
+      schema:
+        type: string
+        example: "code1:value1,code2:value2"
+    sort:
+      name: sort
+      in: query
+      description: Ordenar los resultados por el campo `nombre` en orden descendente.
+      required: false
+      schema:
+        type: string
+        example: "nombre,desc"
+    limit:
+      name: limit
+      in: query
+      description: Número máximo de productos a devolver.
+      required: false
+      schema:
+        type: integer
+        example: 15
+    offset:
+      name: offset
+      in: query
+      description: Desplazamiento de la página (para paginación)
+      required: false
+      schema:
+        type: integer
+        example: 0
+  responses:
+    BadRequest:
+      description: "Bad Request"
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: "#/components/schemas/ErrorType"
+            example:
+              exceptionId: "SVC0001"
+              exceptionText: "Generic Client Error: client error"
+              moreInfo: "API Generic wildcard fault response"
+              userMessage: "Generic Client Error"
+    NotFound:
+      description: "Not Found"
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: "#/components/schemas/ErrorType"
+            example:
+              exceptionId: "SVC0004"
+              exceptionText: "Requested API port or resource does not exist."
+              moreInfo: "Requested API port or resource does not exist."
+              userMessage: "Invalid Request URI"
+    Conflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: "#/components/schemas/ErrorType"
+            example:
+              exceptionId: "SVC0005"
+              exceptionText: “Correlator %1 specified infield %2 is a duplicate”, %1Correlator, %2 - Field
+              moreInfo: "Correlator specified in a request message is invalid because it already exists."
+              userMessage: "Duplicated correlator"
+    InternalServerError:
+      description: "Internal Server Error"
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: "#/components/schemas/ErrorType"
+            example:
+              exceptionId: "SVR1000"
+              exceptionText: "'Generic Server Error: server error"
+              moreInfo: "There was a problem in the Service Providers network that prevented to carry out the request."
+              userMessage: "Generic Server Fault"
