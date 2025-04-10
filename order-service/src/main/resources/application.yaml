@@ -1,1 +1,11 @@
-spring.application.name=order-service
+server:
+  port: 8013
+  servlet:
+    context-path: /custom-path
+spring:
+  application:
+    name: serviceorder
+  data:
+    mongodb:
+      uri: mongodb+srv://bryan99:root@clusterkeola.8vxhjyg.mongodb.net/?retryWrites=true&w=majority&appName=ClusterKeola
+      database: orderdb

@@ -4,7 +4,7 @@ info:
   description: 'Esta API permite gestionar los pedidos'
   version: 1.0.0
 servers:
-  - url: 'http://localhost:8012/serviceorder/v1'
+  - url: 'http://localhost:8013/serviceorder/v1'
 x-devops-properties:
   apiType: ne
   apiDomain: custom
@@ -147,6 +147,16 @@ components:
       type: object
       description: Client Response
       properties:
+        orders:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderReponse'
+        metadata:
+          $ref: '#/components/schemas/MetadataResponse'
+    OrderReponse:
+      type: object
+      description: Client Response
+      properties:
         orderId:
           type: integer
           description: "Id of order."
@@ -171,8 +181,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/AditionalData'
-        metadata:
-          $ref: '#/components/schemas/MetadataResponse'
     CreateOrderRequest:
       type: object
       properties:

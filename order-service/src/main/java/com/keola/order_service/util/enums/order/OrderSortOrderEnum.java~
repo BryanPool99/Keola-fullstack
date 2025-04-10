@@ -1,0 +1,14 @@
+package com.keola.order_service.util.enums.order;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor
+public enum OrderSortOrderEnum {
+
+    ID_ASC("id,asc"),
+    ID_DESC("id,desc");
+
+    private final String code;
+}
