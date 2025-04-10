@@ -1,0 +1,374 @@
+openapi: 3.0.1
+info:
+  title: Keola Client API
+  description: 'Esta API permite gestionar los clientes'
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:8011/serviceclient/v1'
+x-devops-properties:
+  apiType: ne
+  apiDomain: custom
+  apiName: serviceclient
+  apiPlatform: oc
+tags:
+  - name: serviceclient-controller
+    description: Service Client Management Controller
+paths:
+  /client:
+    get:
+      tags:
+        - serviceclient-controller
+      summary: Consult the list of clients(retrieveClient)
+      description: Lista de Clientes
+      operationId: retrieveClient
+      parameters:
+        - $ref: "#/components/parameters/unicaUser"
+        - $ref: "#/components/parameters/filter"
+        - $ref: "#/components/parameters/sort"
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/offset"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveClientResponse'
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+    post:
+      tags:
+        - serviceclient-controller
+      summary: Create a new client in the serviceclient management system(createClient)
+      description: Enviar informacion para creacion de un nuevo cliente
+      operationId:  createClient
+      parameters:
+        - $ref: "#/components/parameters/unicaUser"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateClientRequest'
+      responses:
+        '201':
+          description: Created
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+    patch:
+      tags:
+        - serviceclient-controller
+      summary: Update an existing client in the service client management system(updateClient)
+      description: Enviar informacion para actualizacion de un cliente
+      operationId:  updateClient
+      parameters:
+        - $ref: "#/components/parameters/unicaUser"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateClientRequest'
+      responses:
+        '204':
+          description: No Content
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+components:
+  schemas:
+    RetrieveClientResponse:
+      type: object
+      description: Client Response
+      properties:
+        clients:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClientResponse'
+        metadata:
+          $ref: '#/components/schemas/MetadataResponse'
+    ClientResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: "The unique code for the Product."
+          example: 1
+        firstName:
+          type: string
+          description: "FirstName of the client."
+          example: "Memoria USB"
+        lastName:
+          type: string
+          description: client last name
+          example: 'JORDAN BLANCAS'
+        username:
+          type: string
+          description: client alias
+          example: 'EVIALA'
+        email:
+          type: string
+          description: Email address
+          example: 'email@example.com'
+        phone:
+          type: string
+          description: Phone number
+          example: '123456789'
+        mobile:
+          type: string
+          description: Cell phone number
+          example: '987654321'
+        dni:
+          type: string
+          description: Identity card
+          example: '76804414'
+        status:
+          type: integer
+          description: Status 1(activo) 0(inactivo)
+          example: 1
+        additionalData:
+          type: array
+          items:
+            $ref: '#/components/schemas/AditionalData'
+    CreateClientRequest:
+      type: object
+      properties:
+        firstName:
+          type: string
+          description: "FirstName of the client."
+          example: "Memoria USB"
+        lastName:
+          type: string
+          description: client last name
+          example: 'JORDAN BLANCAS'
+        username:
+          type: string
+          description: client alias
+          example: 'EVIALA'
+        email:
+          type: string
+          description: Email address
+          example: 'email@example.com'
+        phone:
+          type: string
+          description: Phone number
+          example: '123456789'
+        mobile:
+          type: string
+          description: Cell phone number
+          example: '987654321'
+        dni:
+          type: string
+          description: Identity card
+          example: '76804414'
+        status:
+          type: integer
+          description: Status 1(activo) 0(inactivo)
+          example: 1
+        aditionalData:
+          type: array
+          items:
+            $ref: '#/components/schemas/AditionalData'
+    UpdateClientRequest:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: "Product Id"
+          example: 5
+        firstName:
+          type: string
+          description: "FirstName of the client."
+          example: "Memoria USB"
+        lastName:
+          type: string
+          description: client last name
+          example: 'JORDAN BLANCAS'
+        username:
+          type: string
+          description: client alias
+          example: 'EVIALA'
+        email:
+          type: string
+          description: Email address
+          example: 'email@example.com'
+        phone:
+          type: string
+          description: Phone number
+          example: '123456789'
+        mobile:
+          type: string
+          description: Cell phone number
+          example: '987654321'
+        dni:
+          type: string
+          description: Identity card
+          example: '76804414'
+        status:
+          type: integer
+          description: Status 1(activo) 0(inactivo)
+          example: 1
+        aditionalData:
+          type: array
+          items:
+            $ref: '#/components/schemas/AditionalData'
+    MetadataResponse:
+      type: object
+      properties:
+        limit:
+          description: Limit
+          type : integer
+          format: int64
+          example: 25
+        offset:
+          description: Offset
+          type : integer
+          format: int64
+          example: 0
+        totalElements:
+          description: Total elements
+          type : integer
+          format: int64
+          example: 10
+    AditionalData:
+      type: object
+      description: Adittional data
+      properties:
+        key:
+          type: string
+          example: "aditional Key"
+          description: "Clave de datos adicionales. Referencia (Key)"
+        value:
+          type: string
+          example: "aditioanal value"
+          description: "Valor de datos adicionales. Referencia (Value)"
+    ErrorType:
+      type: object
+      properties:
+        exceptionId:
+          type: string
+        exceptionText:
+          type: string
+        moreInfo:
+          type: string
+        userMessage:
+          type: string
+        httpStatus:
+          type: integer
+        exceptionDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorTypeDetail'
+      required:
+        - exceptionId
+        - exceptionText
+        - moreInfo
+        - userMessage
+    ErrorTypeDetail:
+      type: object
+      properties:
+        code:
+          type: string
+        component:
+          type: string
+        description:
+          type: string
+  parameters:
+    unicaUser:
+      name: UNICA-User
+      in: header
+      description: "Identificador del usuario del sistema y/o subsistema que inicia la petición. "
+      required: true
+      schema:
+        type: string
+      example: admin
+    filter:
+      name: filter
+      in: query
+      description: Filtros para la consulta
+      required: false
+      schema:
+        type: string
+        example: "code1:value1,code2:value2"
+    sort:
+      name: sort
+      in: query
+      description: Ordenar los resultados por el campo `nombre` en orden descendente.
+      required: false
+      schema:
+        type: string
+        example: "nombre,desc"
+    limit:
+      name: limit
+      in: query
+      description: Número máximo de productos a devolver.
+      required: false
+      schema:
+        type: integer
+        example: 15
+    offset:
+      name: offset
+      in: query
+      description: Desplazamiento de la página (para paginación)
+      required: false
+      schema:
+        type: integer
+        example: 0
+  responses:
+    BadRequest:
+      description: "Bad Request"
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: "#/components/schemas/ErrorType"
+            example:
+              exceptionId: "SVC0001"
+              exceptionText: "Generic Client Error: client error"
+              moreInfo: "API Generic wildcard fault response"
+              userMessage: "Generic Client Error"
+    NotFound:
+      description: "Not Found"
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: "#/components/schemas/ErrorType"
+            example:
+              exceptionId: "SVC0004"
+              exceptionText: "Requested API port or resource does not exist."
+              moreInfo: "Requested API port or resource does not exist."
+              userMessage: "Invalid Request URI"
+    Conflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: "#/components/schemas/ErrorType"
+            example:
+              exceptionId: "SVC0005"
+              exceptionText: “Correlator %1 specified infield %2 is a duplicate”, %1Correlator, %2 - Field
+              moreInfo: "Correlator specified in a request message is invalid because it already exists."
+              userMessage: "Duplicated correlator"
+    InternalServerError:
+      description: "Internal Server Error"
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: "#/components/schemas/ErrorType"
+            example:
+              exceptionId: "SVR1000"
+              exceptionText: "'Generic Server Error: server error"
+              moreInfo: "There was a problem in the Service Providers network that prevented to carry out the request."
+              userMessage: "Generic Server Fault"

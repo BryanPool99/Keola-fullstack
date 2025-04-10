@@ -1,0 +1,60 @@
+package com.keola.client_service.model.entity;
+
+import jakarta.persistence.Entity;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
+
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = "client")
+@Getter
+@Setter
+@Builder
+public class ClientEntity {
+
+    @Id
+    @Column("client_id")
+    private Integer clientId;
+
+    @Column("first_name")
+    private String firstName;
+
+    @Column("last_name")
+    private String lastName;
+
+    @Column("username")
+    private String userAlias;
+
+    @Column("email")
+    private String email;
+
+    @Column("phone")
+    private String phone;
+
+    @Column("mobile")
+    private String mobile;
+
+    @Column("dni")
+    private String identityCard;
+
+    @Column("aud_usu_alt_ds")
+    private String createdBy;
+
+    @Column("aud_fec_alt_ff")
+    private LocalDateTime creationDate;
+
+    @Column("aud_est_cod_in")
+    private Integer status;
+
+    @Column("aud_usu_mod_ds")
+    private String updatedBy;
+
+    @Column("aud_fec_mod_ff")
+    private LocalDateTime updateDate;
+
+}

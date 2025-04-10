@@ -1,0 +1,4 @@
+package com.keola.client_service.strategic.client;
+
+public interface ClientStrategy {
+}

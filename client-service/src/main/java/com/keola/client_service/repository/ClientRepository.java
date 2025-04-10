@@ -1,0 +1,40 @@
+package com.keola.client_service.repository;
+
+import com.keola.client_service.model.dto.ClientDto;
+import com.keola.client_service.model.entity.ClientEntity;
+import com.keola.client_service.util.constants.ClientQueryConstants;
+import org.springframework.data.r2dbc.repository.Query;
+import org.springframework.data.r2dbc.repository.R2dbcRepository;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
+public interface ClientRepository extends R2dbcRepository<ClientEntity, Integer> {
+
+    @Query(value = ClientQueryConstants.CLIENT_QUERY_LIST_ALL_COUNT)
+    Mono<Long> countClientListAll(String description);
+
+    @Query(value = ClientQueryConstants.CLIENT_QUERY_LIST_ALL + " ORDER BY clientid ASC " +
+            ClientQueryConstants.LIMIT_OFFSET)
+    Flux<ClientDto> findListAllClientIdAsc(String description, Integer limit, Integer offset);
+
+    @Query(value = ClientQueryConstants.CLIENT_QUERY_LIST_ALL + " ORDER BY clientid DESC " +
+            ClientQueryConstants.LIMIT_OFFSET)
+    Flux<ClientDto> findListAllClientIdDesc(String description, Integer limit, Integer offset);
+
+    @Query(value = ClientQueryConstants.CLIENT_QUERY_LIST_ALL + " ORDER BY username ASC " +
+            ClientQueryConstants.LIMIT_OFFSET)
+    Flux<ClientDto> findListAllClientUsernameAsc(String description, Integer limit, Integer offset);
+
+    @Query(value = ClientQueryConstants.CLIENT_QUERY_LIST_ALL + " ORDER BY username DESC " +
+            ClientQueryConstants.LIMIT_OFFSET)
+    Flux<ClientDto> findListAllClientUsernameDesc(String description, Integer limit, Integer offset);
+
+    @Query(value = ClientQueryConstants.CLIENT_QUERY_LIST_SEARCH)
+    Flux<ClientDto> findListClientsSearch(String description);
+
+    @Query(value = ClientQueryConstants.CLIENT_QUERY_GET_BY_ID)
+    Mono<ClientDto> findClientById(Integer productId);
+
+    Mono<ClientEntity> findByClientId(Integer productId);
+
+}
