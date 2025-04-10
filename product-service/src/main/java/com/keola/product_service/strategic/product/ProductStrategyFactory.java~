@@ -1,0 +1,36 @@
+package com.keola.product_service.strategic.product;
+
+import com.keola.product_service.strategic.product.strategies.GetByIdProductStrategy;
+import com.keola.product_service.strategic.product.strategies.ListAllProductStrategy;
+import com.keola.product_service.strategic.product.strategies.SearchProductStrategy;
+import com.keola.product_service.util.Util;
+import com.keola.product_service.util.enums.product.ProductStrategyTypeEnum;
+import com.saleshub.ms.servicecatalog.strategic.product.strategies.GetByIdProductStrategy;
+import com.saleshub.ms.servicecatalog.strategic.product.strategies.ListAllProductStrategy;
+import com.saleshub.ms.servicecatalog.strategic.product.strategies.SearchProductStrategy;
+import com.saleshub.ms.servicecatalog.util.Util;
+import com.saleshub.ms.servicecatalog.util.enums.product.ProductStrategyTypeEnum;
+import org.springframework.stereotype.Component;
+
+import java.util.EnumMap;
+import java.util.Map;
+
+@Component
+public class ProductStrategyFactory {
+
+    private final Map<ProductStrategyTypeEnum, ProductStrategy> strategies =
+            new EnumMap<>(ProductStrategyTypeEnum.class);
+
+    public ProductStrategyFactory(
+            ListAllProductStrategy listAllProductStrategy,
+            GetByIdProductStrategy getByIdProductStrategy,
+            SearchProductStrategy searchProductStrategy) {
+        strategies.put(ProductStrategyTypeEnum.LIST_ALL_PRODUCTS, listAllProductStrategy);
+        strategies.put(ProductStrategyTypeEnum.GET_BY_ID_PRODUCT, getByIdProductStrategy);
+        strategies.put(ProductStrategyTypeEnum.SEARCH_PRODUCTS, searchProductStrategy);
+    }
+
+    public ProductStrategy getStrategy(String retrieveType) {
+        return strategies.get(Util.getProductStrategic().get(retrieveType));
+    }
+}

@@ -1,0 +1,326 @@
+openapi: 3.0.1
+info:
+  title: Keola Product API
+  description: 'Esta API permite gestionar productos'
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:8011/serviceproduct/v1'
+x-devops-properties:
+  apiType: ne
+  apiDomain: custom
+  apiName: serviceproduct
+  apiPlatform: oc
+tags:
+  - name: serviceproduct-controller
+    description: Service Product Management Controller
+paths:
+  /product:
+    get:
+      tags:
+        - serviceproduct-controller
+      summary: Consult the list of products(retrieveProduct)
+      description: Lista de productos
+      operationId: retrieveProduct
+      parameters:
+        - $ref: "#/components/parameters/unicaUser"
+        - $ref: "#/components/parameters/filter"
+        - $ref: "#/components/parameters/sort"
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/offset"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveProductResponse'
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+    post:
+      tags:
+        - serviceproduct-controller
+      summary: Create a new product in the serviceproduct management system(createProduct)
+      description: Enviar informacion para creacion de un nuevo Producto
+      operationId:  createProduct
+      parameters:
+        - $ref: "#/components/parameters/unicaUser"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProductRequest'
+      responses:
+        '201':
+          description: Created
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+    patch:
+      tags:
+        - serviceproduct-controller
+      summary: Update an existing product in the service product management system(updateProduct)
+      description: Enviar informacion para actualizacion de un producto
+      operationId:  updateProduct
+      parameters:
+        - $ref: "#/components/parameters/unicaUser"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProductRequest'
+      responses:
+        '204':
+          description: No Content
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+components:
+  schemas:
+    RetrieveProductResponse:
+      type: object
+      description: Product Response
+      properties:
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductResponse'
+        metadata:
+          $ref: '#/components/schemas/MetadataResponse'
+    ProductResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: "The unique code for the Product."
+          example: 1
+        description:
+          type: string
+          description: "Description of the product."
+          example: "Memoria USB"
+        status:
+          type: integer
+          description: "Status of product."
+          example: 0
+        stock:
+          type: integer
+          description: "Stock of product."
+          example: 100
+        price:
+          type: number
+          description: "Price of product."
+          example: 19.99
+        additionalData:
+          type: array
+          items:
+            $ref: '#/components/schemas/AditionalData'
+    CreateProductRequest:
+      type: object
+      properties:
+        description:
+          type: string
+          description: "Brand description."
+          example: "New product"
+        status:
+          type: integer
+          description: "Product Status 0(inactive) 1(active)"
+          example: 0
+        stock:
+          type: integer
+          description: "Stock of Product"
+          example: 100
+        price:
+          type: number
+          description: "Price of Product"
+          example: 19.99
+        aditionalData:
+          type: array
+          items:
+            $ref: '#/components/schemas/AditionalData'
+    UpdateProductRequest:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: "Product Id"
+          example: 5
+        description:
+          type: string
+          description: "Product description."
+          example: "Edit product"
+        status:
+          type: integer
+          description: "Product Status 0(inactive) 1(active)"
+          example: 0
+        stock:
+          type: integer
+          description: "Stock of Product"
+          example: 100
+        price:
+          type: number
+          description: "Price of Product"
+          example: 19.99
+        aditionalData:
+          type: array
+          items:
+            $ref: '#/components/schemas/AditionalData'
+    MetadataResponse:
+      type: object
+      properties:
+        limit:
+          description: Limit
+          type : integer
+          format: int64
+          example: 25
+        offset:
+          description: Offset
+          type : integer
+          format: int64
+          example: 0
+        totalElements:
+          description: Total elements
+          type : integer
+          format: int64
+          example: 10
+    AditionalData:
+      type: object
+      description: Adittional data
+      properties:
+        key:
+          type: string
+          example: "aditional Key"
+          description: "Clave de datos adicionales. Referencia (Key)"
+        value:
+          type: string
+          example: "aditioanal value"
+          description: "Valor de datos adicionales. Referencia (Value)"
+    ErrorType:
+      type: object
+      properties:
+        exceptionId:
+          type: string
+        exceptionText:
+          type: string
+        moreInfo:
+          type: string
+        userMessage:
+          type: string
+        httpStatus:
+          type: integer
+        exceptionDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorTypeDetail'
+      required:
+        - exceptionId
+        - exceptionText
+        - moreInfo
+        - userMessage
+    ErrorTypeDetail:
+      type: object
+      properties:
+        code:
+          type: string
+        component:
+          type: string
+        description:
+          type: string
+  parameters:
+    unicaUser:
+      name: UNICA-User
+      in: header
+      description: "Identificador del usuario del sistema y/o subsistema que inicia la petición. "
+      required: true
+      schema:
+        type: string
+      example: admin
+    filter:
+      name: filter
+      in: query
+      description: Filtros para la consulta
+      required: false
+      schema:
+        type: string
+        example: "code1:value1,code2:value2"
+    sort:
+      name: sort
+      in: query
+      description: Ordenar los resultados por el campo `nombre` en orden descendente.
+      required: false
+      schema:
+        type: string
+        example: "nombre,desc"
+    limit:
+      name: limit
+      in: query
+      description: Número máximo de productos a devolver.
+      required: false
+      schema:
+        type: integer
+        example: 15
+    offset:
+      name: offset
+      in: query
+      description: Desplazamiento de la página (para paginación)
+      required: false
+      schema:
+        type: integer
+        example: 0
+  responses:
+    BadRequest:
+      description: "Bad Request"
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: "#/components/schemas/ErrorType"
+            example:
+              exceptionId: "SVC0001"
+              exceptionText: "Generic Client Error: client error"
+              moreInfo: "API Generic wildcard fault response"
+              userMessage: "Generic Client Error"
+    NotFound:
+      description: "Not Found"
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: "#/components/schemas/ErrorType"
+            example:
+              exceptionId: "SVC0004"
+              exceptionText: "Requested API port or resource does not exist."
+              moreInfo: "Requested API port or resource does not exist."
+              userMessage: "Invalid Request URI"
+    Conflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: "#/components/schemas/ErrorType"
+            example:
+              exceptionId: "SVC0005"
+              exceptionText: “Correlator %1 specified infield %2 is a duplicate”, %1Correlator, %2 - Field
+              moreInfo: "Correlator specified in a request message is invalid because it already exists."
+              userMessage: "Duplicated correlator"
+    InternalServerError:
+      description: "Internal Server Error"
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: "#/components/schemas/ErrorType"
+            example:
+              exceptionId: "SVR1000"
+              exceptionText: "'Generic Server Error: server error"
+              moreInfo: "There was a problem in the Service Providers network that prevented to carry out the request."
+              userMessage: "Generic Server Fault"

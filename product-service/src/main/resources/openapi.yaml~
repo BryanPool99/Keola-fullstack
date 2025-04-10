@@ -1,0 +1,590 @@
+openapi: 3.0.1
+info:
+  title: SalesHub Catalog API
+  description: 'Esta API permite gestionar productos y categorias'
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:8012/servicecatalog/v1'
+x-devops-properties:
+  apiType: ne
+  apiDomain: custom
+  apiName: servicecatalog
+  apiPlatform: oc
+tags:
+  - name: servicecatalog-controller
+    description: Service Catalog Management Controller
+paths:
+  /category:
+    get:
+      tags:
+        - servicecatalog-controller
+      summary: Consult the list of categories(retrieveCategory)
+      description: Lista de Categorias
+      operationId: retrieveCategory
+      parameters:
+        - $ref: "#/components/parameters/unicaServiceId"
+        - $ref: "#/components/parameters/unicaApplication"
+        - $ref: "#/components/parameters/unicaPid"
+        - $ref: "#/components/parameters/unicaUser"
+        - $ref: "#/components/parameters/authorization"
+        - $ref: "#/components/parameters/filter"
+        - $ref: "#/components/parameters/sort"
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/offset"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveCategoryResponse'
+          headers:
+            UNICA-ServiceId:
+              $ref: "#/components/headers/UNICA-ServiceId"
+            UNICA-ServicePID:
+              $ref: "#/components/headers/UNICA-PID"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+    post:
+      tags:
+        - servicecatalog-controller
+      summary: Create a new category in the service catalog management system(createCategory)
+      description: Enviar informacion para creacion de una nueva categoria
+      operationId:  createCategory
+      parameters:
+        - $ref: "#/components/parameters/unicaServiceId"
+        - $ref: "#/components/parameters/unicaApplication"
+        - $ref: "#/components/parameters/unicaPid"
+        - $ref: "#/components/parameters/unicaUser"
+        - $ref: "#/components/parameters/authorization"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCategoryRequest'
+      responses:
+        '201':
+          description: Created
+          headers:
+            UNICA-ServiceId:
+              $ref: '#/components/headers/UNICA-ServiceId'
+            UNICA-PID:
+              $ref: '#/components/headers/UNICA-PID'
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+    patch:
+      tags:
+        - servicecatalog-controller
+      summary: Update category details in the service catalog management system(updateCategory)
+      description: Enviar informacion para actualizacion de una categoria
+      operationId:  updateCategory
+      parameters:
+        - $ref: "#/components/parameters/unicaServiceId"
+        - $ref: "#/components/parameters/unicaApplication"
+        - $ref: "#/components/parameters/unicaPid"
+        - $ref: "#/components/parameters/unicaUser"
+        - $ref: "#/components/parameters/authorization"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCategoryRequest'
+      responses:
+        '204':
+          description: No Content
+          headers:
+            UNICA-ServiceId:
+              $ref: '#/components/headers/UNICA-ServiceId'
+            UNICA-PID:
+              $ref: '#/components/headers/UNICA-PID'
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+  /product:
+    get:
+      tags:
+        - servicecatalog-controller
+      summary: Consult the list of products(retrieveProduct)
+      description: Lista de productos
+      operationId: retrieveProduct
+      parameters:
+        - $ref: "#/components/parameters/unicaServiceId"
+        - $ref: "#/components/parameters/unicaApplication"
+        - $ref: "#/components/parameters/unicaPid"
+        - $ref: "#/components/parameters/unicaUser"
+        - $ref: "#/components/parameters/authorization"
+        - $ref: "#/components/parameters/filter"
+        - $ref: "#/components/parameters/sort"
+        - $ref: "#/components/parameters/limit"
+        - $ref: "#/components/parameters/offset"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RetrieveProductResponse'
+          headers:
+            UNICA-ServiceId:
+              $ref: "#/components/headers/UNICA-ServiceId"
+            UNICA-ServicePID:
+              $ref: "#/components/headers/UNICA-PID"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+    post:
+      tags:
+        - servicecatalog-controller
+      summary: Create a new product in the servicecatalog management system(createProduct)
+      description: Enviar informacion para creacion de un nuevo Producto
+      operationId:  createProduct
+      parameters:
+        - $ref: "#/components/parameters/unicaServiceId"
+        - $ref: "#/components/parameters/unicaApplication"
+        - $ref: "#/components/parameters/unicaPid"
+        - $ref: "#/components/parameters/unicaUser"
+        - $ref: "#/components/parameters/authorization"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProductRequest'
+      responses:
+        '201':
+          description: Created
+          headers:
+            UNICA-ServiceId:
+              $ref: '#/components/headers/UNICA-ServiceId'
+            UNICA-PID:
+              $ref: '#/components/headers/UNICA-PID'
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+    patch:
+      tags:
+        - servicecatalog-controller
+      summary: Update an existing product in the service catalog management system(updateProduct)
+      description: Enviar informacion para actualizacion de un producto
+      operationId:  updateProduct
+      parameters:
+        - $ref: "#/components/parameters/unicaServiceId"
+        - $ref: "#/components/parameters/unicaApplication"
+        - $ref: "#/components/parameters/unicaPid"
+        - $ref: "#/components/parameters/unicaUser"
+        - $ref: "#/components/parameters/authorization"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProductRequest'
+      responses:
+        '204':
+          description: No Content
+          headers:
+            UNICA-ServiceId:
+              $ref: '#/components/headers/UNICA-ServiceId'
+            UNICA-PID:
+              $ref: '#/components/headers/UNICA-PID'
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+components:
+  schemas:
+    RetrieveCategoryResponse:
+      type: object
+      description: Retrieve Category Response
+      properties:
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/CategoryResponse'
+        metadata:
+          $ref: '#/components/schemas/MetadataResponse'
+    CategoryResponse:
+      type: object
+      properties:
+        categoryId:
+          type: integer
+          description: "The unique code for the category."
+          example: 101
+        categoryDescription:
+          type: string
+          description: "Description of the category."
+          example: "Electronics"
+        categoryStatus:
+          type: integer
+          description: "Active(1) ,inactive(0)"
+          example: 1
+        additionalData:
+          type: array
+          items:
+            $ref: '#/components/schemas/AditionalData'
+    CreateCategoryRequest:
+      type: object
+      properties:
+        description:
+          type: string
+          description: Description of the category
+          example: "New Category"
+        status:
+          type: integer
+          description: State of the category in the system 1(active) 0(inactive)
+          example: 1
+        aditionalData:
+          type: array
+          items:
+            $ref: '#/components/schemas/AditionalData'
+    UpdateCategoryRequest:
+      type: object
+      properties:
+        categoryId:
+          type: integer
+          description: Code of the category
+          example: 1
+        description:
+          type: string
+          description: Description of the category
+          example: "Edit category"
+        status:
+          type: integer
+          description: State of the category in the system 1(inactive) 0(active)
+          example: 1
+        aditionalData:
+          type: array
+          items:
+            $ref: '#/components/schemas/AditionalData'
+    RetrieveProductResponse:
+      type: object
+      description: Product Response
+      properties:
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductResponse'
+        metadata:
+          $ref: '#/components/schemas/MetadataResponse'
+    ProductResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: "The unique code for the Product."
+          example: 1
+        name:
+          type: string
+          description: "Description of the product."
+          example: "Memoria USB"
+        status:
+          type: integer
+          description: "Status of product."
+          example: 0
+        stock:
+          type: integer
+          description: "Stock of product."
+          example: 100
+        price:
+          type: number
+          description: "Price of product."
+          example: 19.99
+        categoryId:
+          type: integer
+          description: "The category id"
+          example: 1
+        categoryDescription:
+          type: string
+          description: "The description of category"
+          example: "Laptops"
+        additionalData:
+          type: array
+          items:
+            $ref: '#/components/schemas/AditionalData'
+    CreateProductRequest:
+      type: object
+      properties:
+        description:
+          type: string
+          description: "Brand description."
+          example: "New product"
+        status:
+          type: integer
+          description: "Product Status 0(inactive) 1(active)"
+          example: 0
+        stock:
+          type: integer
+          description: "Stock of Product"
+          example: 100
+        price:
+          type: number
+          description: "Price of Product"
+          example: 19.99
+        categoryId:
+          type: integer
+          description: "Category of Product"
+          example: 4
+        aditionalData:
+          type: array
+          items:
+            $ref: '#/components/schemas/AditionalData'
+    UpdateProductRequest:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: "Product Id"
+          example: 5
+        description:
+          type: string
+          description: "Product description."
+          example: "Edit product"
+        status:
+          type: integer
+          description: "Product Status 0(inactive) 1(active)"
+          example: 0
+        stock:
+          type: integer
+          description: "Stock of Product"
+          example: 100
+        price:
+          type: number
+          description: "Price of Product"
+          example: 19.99
+        categoryId:
+          type: integer
+          description: "Category of Product"
+          example: 4
+        aditionalData:
+          type: array
+          items:
+            $ref: '#/components/schemas/AditionalData'
+    MetadataResponse:
+      type: object
+      properties:
+        limit:
+          description: Limit
+          type : integer
+          format: int64
+          example: 25
+        offset:
+          description: Offset
+          type : integer
+          format: int64
+          example: 0
+        totalElements:
+          description: Total elements
+          type : integer
+          format: int64
+          example: 10
+    AditionalData:
+      type: object
+      description: Adittional data
+      properties:
+        key:
+          type: string
+          example: "aditional Key"
+          description: "Clave de datos adicionales. Referencia (Key)"
+        value:
+          type: string
+          example: "aditioanal value"
+          description: "Valor de datos adicionales. Referencia (Value)"
+    ErrorType:
+      type: object
+      properties:
+        exceptionId:
+          type: string
+        exceptionText:
+          type: string
+        moreInfo:
+          type: string
+        userMessage:
+          type: string
+        httpStatus:
+          type: integer
+        exceptionDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorTypeDetail'
+      required:
+        - exceptionId
+        - exceptionText
+        - moreInfo
+        - userMessage
+    ErrorTypeDetail:
+      type: object
+      properties:
+        code:
+          type: string
+        component:
+          type: string
+        description:
+          type: string
+  parameters:
+    unicaServiceId:
+      name: UNICA-ServiceId
+      in: header
+      description: "Identificador único de cada ejecución dentro del contexto de la aplicación consumidora. Patrón: '[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}'."
+      required: true
+      schema:
+        type: string
+      example: 1b567df3-0fa8-4ad2-ab0b-a97291904361
+    unicaApplication:
+      name: UNICA-Application
+      in: header
+      description: "Identificación del sistema que origina la petición. "
+      required: true
+      schema:
+        type: string
+      example: wappe
+    unicaPid:
+      name: UNICA-PID
+      in: header
+      description: "Identificador único del flujo de ejecución para cubrir funcionalmente las interacciones que se puedan necesitar para completar un proceso o subproceso de negocio. Patrón: '[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}'. "
+      required: true
+      schema:
+        type: string
+      example: 550e8400-e29b-41d4-a716-446655440000
+    unicaUser:
+      name: UNICA-User
+      in: header
+      description: "Identificador del usuario del sistema y/o subsistema que inicia la petición. "
+      required: true
+      schema:
+        type: string
+      example: admin
+    authorization:
+      name: Authorization
+      in: header
+      description: "Incluye la prueba de acceso (usando el modelo de seguridad OAuth2.0) para garantizar que el consumidor tiene privilegios para ingresar a la base de datos."
+      required: false
+      schema:
+        type: string
+      example: 2q5jkdf3-0das8-4gd3-a12d-at3h5g357r46
+    filter:
+      name: filter
+      in: query
+      description: Filtros para la consulta
+      required: false
+      schema:
+        type: string
+        example: "code1:value1,code2:value2"
+    sort:
+      name: sort
+      in: query
+      description: Ordenar los resultados por el campo `nombre` en orden descendente.
+      required: false
+      schema:
+        type: string
+        example: "nombre,desc"
+    limit:
+      name: limit
+      in: query
+      description: Número máximo de productos a devolver.
+      required: false
+      schema:
+        type: integer
+        example: 15
+    offset:
+      name: offset
+      in: query
+      description: Desplazamiento de la página (para paginación)
+      required: false
+      schema:
+        type: integer
+        example: 0
+  responses:
+    BadRequest:
+      description: "Bad Request"
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: "#/components/schemas/ErrorType"
+            example:
+              exceptionId: "SVC0001"
+              exceptionText: "Generic Client Error: client error"
+              moreInfo: "API Generic wildcard fault response"
+              userMessage: "Generic Client Error"
+      headers:
+        UNICA-ServiceId:
+          $ref: "#/components/headers/UNICA-ServiceId"
+        UNICA-PID:
+          $ref: "#/components/headers/UNICA-PID"
+    NotFound:
+      description: "Not Found"
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: "#/components/schemas/ErrorType"
+            example:
+              exceptionId: "SVC0004"
+              exceptionText: "Requested API port or resource does not exist."
+              moreInfo: "Requested API port or resource does not exist."
+              userMessage: "Invalid Request URI"
+      headers:
+        UNICA-ServiceId:
+          $ref: "#/components/headers/UNICA-ServiceId"
+        UNICA-PID:
+          $ref: "#/components/headers/UNICA-PID"
+    Conflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: "#/components/schemas/ErrorType"
+            example:
+              exceptionId: "SVC0005"
+              exceptionText: “Correlator %1 specified infield %2 is a duplicate”, %1Correlator, %2 - Field
+              moreInfo: "Correlator specified in a request message is invalid because it already exists."
+              userMessage: "Duplicated correlator"
+      headers:
+        UNICA-ServiceId:
+          $ref: "#/components/headers/UNICA-ServiceId"
+        UNICA-PID:
+          $ref: "#/components/headers/UNICA-PID"
+    InternalServerError:
+      description: "Internal Server Error"
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: "#/components/schemas/ErrorType"
+            example:
+              exceptionId: "SVR1000"
+              exceptionText: "'Generic Server Error: server error"
+              moreInfo: "There was a problem in the Service Providers network that prevented to carry out the request."
+              userMessage: "Generic Server Fault"
+      headers:
+        UNICA-ServiceId:
+          $ref: "#/components/headers/UNICA-ServiceId"
+        UNICA-PID:
+          $ref: "#/components/headers/UNICA-PID"
+  headers:
+    UNICA-ServiceId:
+      description: "If this API is used via a platform acting as a common entry point to different OBs, this identifier is used to route the request to the corresponding OB environment"
+      schema:
+        type: string
+    UNICA-PID:
+      description: Unique identifier for the process or execution flow
+      schema:
+        type: string

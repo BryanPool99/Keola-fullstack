@@ -1,0 +1,75 @@
+package com.keola.product_service.controller;
+
+import com.keola.product_service.model.CreateProductRequest;
+import com.keola.product_service.model.RetrieveProductResponse;
+import com.keola.product_service.model.UpdateProductRequest;
+import com.keola.product_service.service.ProductService;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
+
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+@ExtendWith(MockitoExtension.class)
+class ServiceProductControllerTest {
+
+    @Mock
+    private ProductService productService;
+
+    @InjectMocks
+    private ServiceProductController serviceProductController;
+
+    private String unicaUser;
+    private ServerWebExchange exchange;
+
+    @BeforeEach
+    void setUp() {
+        this.unicaUser = "AppUser";
+    }
+
+    @Test
+    @DisplayName("Returns status http 200 when the service response of to list of products")
+    void returnStatusHttp200WhenServiceResponseListOfProducts() {
+        var retrieveProductResponse = mock(RetrieveProductResponse.class);
+
+        when(productService.listProducts(anyString(), anyInt(), anyInt(), anyString(), anyString()))
+                .thenReturn(Mono.just(retrieveProductResponse));
+
+        StepVerifier.create(serviceProductController.retrieveProduct(unicaUser, "retrieveType:GBIP,productId:5",
+                        "", 0, 0, exchange))
+                .assertNext(response ->
+                        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode()))
+                .verifyComplete();
+    }
+
+    @Test
+    @DisplayName("Returns http 201 status when the service that create a product correctly")
+    void returnStatusHttp201WhenServiceCreateProductCorrectly() {
+        when(productService.createProduct(any(CreateProductRequest.class), anyString()))
+                .thenReturn(Mono.empty());
+
+        StepVerifier.create(serviceProductController.createProduct(unicaUser,
+                        Mono.just(CreateProductRequest.builder().build()), exchange))
+                .assertNext(response -> Assertions.assertEquals(HttpStatus.CREATED,
+                        response.getStatusCode()))
+                .verifyComplete();
+    }
+
+    @Test
+    @DisplayName("Return http 204 status when the service that update a product correctly")
+    void returnStatusHttp204WhenServiceUpdateProductCorrectly() {
+        when(productService.updateProduct(any(UpdateProductRequest.class), anyString()))
+                .thenReturn(Mono.empty());
+    }
+}

@@ -1,0 +1,27 @@
+server:
+  port: 8011
+  servlet:
+    context-path: /custom-path
+spring:
+  cloud:
+    config:
+      enabled: false
+  application:
+    name: serviceproduct
+  main:
+    allow-bean-definition-overriding: true
+    web-application-type: reactive
+  r2dbc:
+    url: 'r2dbc:postgresql://keola_owner:npg_F6yeu8SlvMVw@ep-purple-smoke-a8y2qhkr-pooler.eastus2.azure.neon.tech/keola?sslmode=require&searchPath=public'
+    username: 'keola_owner'
+    password: 'npg_F6yeu8SlvMVw'
+    pool:
+      enabled: true
+      initial-size: 1
+      max-size: 10
+      max-idle-time: 300000  # Tiempo en milisegundos (5 minutos)
+      max-life-time: 600000  # Tiempo en milisegundos (10 minutos)
+  config:
+    import: optional:configserver:http://localhost:8888/
+
+logging.level.org.springframework.data.r2dbc: DEBUG
