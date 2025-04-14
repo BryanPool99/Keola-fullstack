@@ -7,5 +7,5 @@ spring:
     name: serviceorder
   data:
     mongodb:
-      uri: mongodb+srv://bryan99:root@clusterkeola.8vxhjyg.mongodb.net/?retryWrites=true&w=majority&appName=ClusterKeola
-      database: orderdb
+      uri: mongodb+srv://user_test:user_test@prueba.or9uj6t.mongodb.net/?retryWrites=true&w=majority&appName=prueba
+      database: keoladb

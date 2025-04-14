@@ -14,8 +14,7 @@ import java.util.Map;
 public class GetByIdOrdertStrategy implements OrderStrategy {
     @Override
     public Mono<RetrieveOrderResponse> retrieveOrder(
-            Map<String, String> values, Integer limit, Integer offset,
-            String sort) {
+            Map<String, String> values, Integer limit, Integer offset, String sort) {
         return null;
     }
 }

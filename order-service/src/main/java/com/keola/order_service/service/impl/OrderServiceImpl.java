@@ -1,15 +1,11 @@
 package com.keola.order_service.service.impl;
 
-import com.keola.order_service.mapper.OrderMapper;
 import com.keola.order_service.model.CreateOrderRequest;
 import com.keola.order_service.model.RetrieveOrderDetailResponse;
 import com.keola.order_service.model.RetrieveOrderResponse;
 import com.keola.order_service.model.UpdateOrderRequest;
 import com.keola.order_service.model.dto.ClientDto;
-import com.keola.order_service.model.dto.ClientResponse;
 import com.keola.order_service.model.dto.ProductDto;
-import com.keola.order_service.query.OrderQueryService;
-import com.keola.order_service.repository.OrderRepository;
 import com.keola.order_service.service.OrderService;
 import com.keola.order_service.strategic.order.OrderStrategyFactory;
 import com.keola.order_service.util.Util;
@@ -17,7 +13,6 @@ import com.keola.order_service.util.enums.order.OrderFilterEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.util.Map;
@@ -27,11 +22,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
 
-    private final WebClient.Builder webClientBuilder;
     private final OrderStrategyFactory orderStrategyFactory;
-    private final OrderQueryService orderQueryService;
-    private final OrderRepository orderRepository;
-    private final OrderMapper orderMapper;
 
     @Override
     public Mono<RetrieveOrderResponse> listOrders(
@@ -49,22 +40,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Mono<ClientDto> getClientDetails(String filter) {
-        String url = "http://localhost:8012/serviceclient/v1/client?filter=" + filter;
-        return webClientBuilder.baseUrl(url)  // Utilizamos la URL construida
-                .build()
-                .get()
-                .retrieve()
-                .bodyToMono(ClientResponse.class)  // Deserializamos la respuesta en un objeto ClientResponse
-                .flatMap(clientResponse -> {
-                    // Extraemos el primer cliente de la lista de "clients"
-                    if (clientResponse.getClients() != null && !clientResponse.getClients().isEmpty()) {
-                        return Mono.just(clientResponse.getClients().get(0));
-                    } else {
-                        return Mono.error(new RuntimeException("No client found"));
-                    }
-                })
-                .doOnError(error -> log.error("Error fetching client details: {}", error.getMessage()))
-                .doOnSuccess(client -> log.info("Fetched client details successfully"));
+        return null;
     }
 
     @Override
